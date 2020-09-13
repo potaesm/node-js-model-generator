@@ -30,7 +30,7 @@ async function gen() {
         }
     }
     const filePath = `./model/${modelName}.js`;
-    const modelDefine = `let ${modelAttribute} = {}\n`;
+    const modelDefine = `let ${modelAttribute} = {};\n`;
     const constructor = `function ${modelName}(${extractedAttribute.toString()}) { ${modelAttribute} = {${extractedAttribute.toString()}}; return ${modelAttribute}; }\n`;
     const moduleExports = `module.exports = ${modelName};\n`;
     const content = modelDefine + constructor + getter + setter + moduleExports;
