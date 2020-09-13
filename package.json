@@ -1,0 +1,14 @@
+{
+  "name": "model-generator",
+  "version": "1.0.0",
+  "description": "Generate constructor, getter and setter",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "Suthinan Musitmani",
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^9.0.1"
+  }
+}
