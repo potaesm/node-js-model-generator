@@ -1,5 +1,5 @@
 {
-  "name": "model-generator",
+  "name": "node-js-model-gen",
   "version": "1.0.0",
   "description": "Generate constructor, getter and setter",
   "main": "index.js",
