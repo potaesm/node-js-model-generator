@@ -12,7 +12,7 @@ function camelToPascal(str) {
     return str.replace(str[0], str[0].toUpperCase());
 }
 
-async function gen(...args) {
+async function gen(args) {
     // const args = process.argv.slice(2);
     let extractedAttribute = [];
     let modelName = '';
