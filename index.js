@@ -31,7 +31,7 @@ async function gen(args) {
             constructorAssign = constructorAssign.concat(`\tthis.${argCamel} = ${argCamel};\n`);
         }
     }
-    const filePath = path.join(os.tmpdir(), modelName);
+    const filePath = path.join(os.tmpdir(), `${modelName}.js`);
     const constructor = `function ${modelName}(${extractedAttribute.toString()}) {\n${constructorAssign}}\n`;
     const moduleExports = `module.exports = ${modelName};\n`;
     const content = constructor + getter + setter + moduleExports;
