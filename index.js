@@ -43,7 +43,7 @@ const app = express();
 app.use(express.json());
 app.use(cors({ origin: true }));
 
-app.get('/', async (request, response) => {
+app.get('', async (request, response) => {
     try {
         if (!!request.query.model) {
             const outputPath = await gen(JSON.parse(request.query.model));
