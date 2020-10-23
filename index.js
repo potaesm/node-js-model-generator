@@ -37,7 +37,7 @@ async function gen(args) {
     }
     const filePath = path.join(os.tmpdir(), `${modelName}.js`);
     const constructor = `function ${modelName}(${extractedAttribute.map((attribute) => attribute + '=null').join(', ')}) {\n${constructorAssign}}\n`;
-    const defaultGetter = `${modelName}.prototype.get = function () {\n\treturn {${defaultGetterObject.slice(0, -2) + '\n'}};\n}\n`;
+    const defaultGetter = `${modelName}.prototype.get = function () {\n\treturn {\n${defaultGetterObject.slice(0, -2) + '\n'}\t};\n}\n`;
     const mapper = `${modelName}.prototype.map = function (object) {\n${mapperAssign}}\n`;
     const moduleExports = `module.exports = ${modelName};\n`;
     const content = constructor + mapper + defaultGetter + getter + setter + moduleExports;
