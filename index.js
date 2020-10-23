@@ -32,11 +32,11 @@ async function gen(args) {
             setter = setter.concat(`${modelName}.prototype.set${argPascal} = function (${argCamel}) { this.${argCamel} = ${argCamel} }\n`);
             constructorAssign = constructorAssign.concat(`\tthis.${argCamel} = ${argCamel};\n`);
             defaultGetterObject = defaultGetterObject.concat(`\t\t${argCamel}: this.${argCamel},\n`);
-            mapperAssign = mapperAssign.concat(`\t!!object.${argCamel} ? this.${argCamel} = object.${argCamel} : void(0);\n`);
+            mapperAssign = mapperAssign.concat(`\t!!object.${argCamel} ? this.${argCamel} = object.${argCamel} : void (0);\n`);
         }
     }
     const filePath = path.join(os.tmpdir(), `${modelName}.js`);
-    const constructor = `function ${modelName}(${extractedAttribute.map((attribute) => attribute + '=null').join(', ')}) {\n${constructorAssign}}\n`;
+    const constructor = `function ${modelName}(${extractedAttribute.map((attribute) => attribute + ' = null').join(', ')}) {\n${constructorAssign}}\n`;
     const defaultGetter = `${modelName}.prototype.get = function () {\n\treturn {\n${defaultGetterObject.slice(0, -2) + '\n'}\t};\n}\n`;
     const mapper = `${modelName}.prototype.map = function (object) {\n${mapperAssign}}\n`;
     const moduleExports = `module.exports = ${modelName};\n`;
