@@ -19,6 +19,8 @@ async function gen(args) {
     let getter = '';
     let setter = '';
     let constructorAssign = '';
+    let defaultGetterObject = '';
+    let mapperAssign = '';
     for (let index = 0; index < args.length; index++) {
         const argCamel = pascalToCamel(args[index]);
         const argPascal = camelToPascal(args[index]);
@@ -29,12 +31,16 @@ async function gen(args) {
             getter = getter.concat(`${modelName}.prototype.get${argPascal} = function () { return this.${argCamel} }\n`);
             setter = setter.concat(`${modelName}.prototype.set${argPascal} = function (${argCamel}) { this.${argCamel} = ${argCamel} }\n`);
             constructorAssign = constructorAssign.concat(`\tthis.${argCamel} = ${argCamel};\n`);
+            defaultGetterObject = defaultGetterObject.concat(`\t\t${argCamel}: this.${argCamel},\n`);
+            mapperAssign = mapperAssign.concat(`\t!!object.${argCamel} ? this.${argCamel} = object.${argCamel} : void(0);\n`);
         }
     }
     const filePath = path.join(os.tmpdir(), `${modelName}.js`);
-    const constructor = `function ${modelName}(${extractedAttribute.toString()}) {\n${constructorAssign}}\n`;
+    const constructor = `function ${modelName}(${extractedAttribute.map((attribute) => attribute + '=null').join(', ').toString()}) {\n${constructorAssign}}\n`;
+    const defaultGetter = `${modelName}.prototype.get = function () {\n\treturn {${defaultGetterObject.slice(0, -2) + '\n'}};\n}\n`;
+    const mapper = `${modelName}.prototype.map = function (object) {\n${mapperAssign}}\n`;
     const moduleExports = `module.exports = ${modelName};\n`;
-    const content = constructor + getter + setter + moduleExports;
+    const content = constructor + mapper + defaultGetter + getter + setter + moduleExports;
     await fs.outputFile(filePath, content);
     return filePath;
 }
