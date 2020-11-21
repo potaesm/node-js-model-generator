@@ -32,7 +32,7 @@ async function gen(args) {
             setter = setter.concat(`${modelName}.prototype.set${argPascal} = function (${argCamel}) { this.${argCamel} = ${argCamel} }\n`);
             constructorAssign = constructorAssign.concat(`\tthis.${argCamel} = ${argCamel};\n`);
             defaultGetterObject = defaultGetterObject.concat(`\t\t${argCamel}: this.${argCamel},\n`);
-            mapperAssign = mapperAssign.concat(`\t!!object.${argCamel} ? this.${argCamel} = object.${argCamel} : void (0);\n`);
+            mapperAssign = mapperAssign.concat(`\t(!!object.${argCamel} || object.${argCamel} === 0) ? this.${argCamel} = object.${argCamel} : void (0);\n`);
         }
     }
     const filePath = path.join(os.tmpdir(), `${modelName}.js`);
