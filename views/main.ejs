@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Model Gen</title>
+</head>
+
+<body>
+    <h1>ES5 Model Generator</h1>
+    <form name='modelForm' method='POST'>
+        <table id='formTable'>
+            <tr>
+                <td>Model:</td>
+                <td><input type='text' name='modelName'></td>
+            </tr>
+            <tr>
+                <td>Attribute:</td>
+                <td>
+                    <button onclick="addAttribute()" type="button">Add</button>
+                    <button onclick="removeLast()" type="button">Remove Last</button>
+                    <input type='submit' value='Generate'>
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+<script>
+    let attributeCounter = 0;
+    function addAttribute() {
+        const row = document.getElementById('formTable').insertRow(-1);
+        const title = document.createElement('td');
+        title.appendChild(document.createTextNode(`Attribute [${attributeCounter}]`));
+        const field = document.createElement('td');
+        const input = document.createElement('input');
+        input.name = `attribute${attributeCounter}`;
+        field.appendChild(input);
+        row.id = `row${attributeCounter}`;
+        row.appendChild(title);
+        row.appendChild(field);
+        attributeCounter++;
+    }
+    function removeLast() {
+        if (attributeCounter > 0) {
+            attributeCounter--;
+            document.getElementById(`row${attributeCounter}`).remove();
+        }
+    }
+</script>
+
+</html>

@@ -1,8 +1,11 @@
 const express = require("express");
+const parser = require('body-parser');
 const cors = require("cors");
 const fs = require("fs-extra");
 const path = require('path');
 const os = require('os');
+
+const PORT = process.env.npm_package_config_port || require('./package.json').config.port;
 
 function pascalToCamel(str) {
     return str.replace(str[0], str[0].toLowerCase());
@@ -46,16 +49,22 @@ async function gen(args) {
 }
 
 const app = express();
-app.use(express.json());
+app.use(parser.urlencoded({ extended: false }));
+app.use(parser.json());
 app.use(cors({ origin: true }));
+app.set ( "view engine", "ejs" );
 
-app.get('', async (request, response) => {
+app.get('', (request, response) => {
+    return response.render('main');
+});
+
+app.post('', async (request, response) => {
     try {
-        if (!!request.query.model) {
-            const outputPath = await gen(JSON.parse(request.query.model));
+        if (!!request.body) {
+            const outputPath = await gen(Object.values(request.body));
             return response.download(outputPath);
         } else {
-            return response.send('Query string ?model=["ModelName", "attributeA", "attributeB", ...]');
+            return response.status(400).send('Empty request body');
         }
     } catch (err) {
         console.log(err);
@@ -63,4 +72,4 @@ app.get('', async (request, response) => {
     }
 });
 
-app.listen(process.env.npm_package_config_port);
+app.listen(PORT);
