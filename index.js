@@ -61,7 +61,7 @@ app.get('', (request, response) => {
 app.post('', async (request, response) => {
     try {
         if (!!request.body) {
-            const outputPath = await gen(Object.values(request.body));
+            const outputPath = await gen(Object.values(request.body).map((item) => item.trim()).filter((item) => !!item));
             return response.download(outputPath);
         } else {
             return response.status(400).send('Empty request body');
