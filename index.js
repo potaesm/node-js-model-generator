@@ -1,7 +1,7 @@
-const express = require("express");
+const express = require('express');
 const parser = require('body-parser');
-const cors = require("cors");
-const fs = require("fs-extra");
+const cors = require('cors');
+const fs = require('fs-extra');
 const path = require('path');
 const os = require('os');
 
@@ -32,7 +32,7 @@ async function gen(args) {
         } else {
             extractedAttribute.push(argCamel);
             getter = getter.concat(`${modelName}.prototype.get${argPascal} = function () { return this.${argCamel} }\n`);
-            setter = setter.concat(`${modelName}.prototype.set${argPascal} = function (${argCamel}) { this.${argCamel} = ${argCamel} }\n`);
+            setter = setter.concat(`${modelName}.prototype.set${argPascal} = function (${argCamel}) { ${argCamel} !== undefined ? this.${argCamel} = ${argCamel} : void (0) }\n`);
             constructorAssign = constructorAssign.concat(`\tthis.${argCamel} = ${argCamel};\n`);
             defaultGetterObject = defaultGetterObject.concat(`\t\t${argCamel}: this.${argCamel},\n`);
             mapperAssign = mapperAssign.concat(`\tobject.${argCamel} !== undefined ? this.${argCamel} = object.${argCamel} : void (0);\n`);
@@ -52,7 +52,7 @@ const app = express();
 app.use(parser.urlencoded({ extended: false }));
 app.use(parser.json());
 app.use(cors({ origin: true }));
-app.set ( "view engine", "ejs" );
+app.set ( 'view engine', 'ejs' );
 
 app.get('', (request, response) => {
     return response.render('main');
