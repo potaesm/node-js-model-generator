@@ -6,17 +6,17 @@
 </head>
 
 <body>
-    <h1>ES5 Model Generator</h1>
+    <h1>Protype Model Generator</h1>
     <form name='modelForm' method='POST' autocomplete='off'>
         <table id='formTable'>
             <tr>
                 <td>Model:</td>
-                <td><input type='text' name='modelName'></td>
+                <td><input type='text' name='modelName' placeholder="ModelName"></td>
             </tr>
             <tr>
-                <td>Attribute:</td>
+                <td>Property:</td>
                 <td>
-                    <button onclick="addAttribute()" type="button">Add</button>
+                    <button onclick="addProperty()" type="button">Add</button>
                     <button onclick="removeLast()" type="button">Remove Last</button>
                     <input type='submit' value='Generate'>
                 </td>
@@ -25,24 +25,24 @@
     </form>
 </body>
 <script>
-    let attributeCounter = 0;
-    function addAttribute() {
+    let propertyCounter = 0;
+    function addProperty() {
         const row = document.getElementById('formTable').insertRow(-1);
         const title = document.createElement('td');
-        title.appendChild(document.createTextNode(`Attribute [${attributeCounter}]`));
+        title.appendChild(document.createTextNode(`Property [${propertyCounter + 1}]`));
         const field = document.createElement('td');
         const input = document.createElement('input');
-        input.name = `attribute${attributeCounter}`;
+        input.name = `property${propertyCounter}`;
         field.appendChild(input);
-        row.id = `row${attributeCounter}`;
+        row.id = `row${propertyCounter}`;
         row.appendChild(title);
         row.appendChild(field);
-        attributeCounter++;
+        propertyCounter++;
     }
     function removeLast() {
-        if (attributeCounter > 0) {
-            attributeCounter--;
-            document.getElementById(`row${attributeCounter}`).remove();
+        if (propertyCounter > 0) {
+            propertyCounter--;
+            document.getElementById(`row${propertyCounter}`).remove();
         }
     }
 </script>
