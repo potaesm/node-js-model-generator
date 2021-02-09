@@ -32,7 +32,8 @@
         title.appendChild(document.createTextNode(`Property [${propertyCounter + 1}]`));
         const field = document.createElement('td');
         const input = document.createElement('input');
-        input.name = `property${propertyCounter}`;
+        input.placeholder = `propertyName${propertyCounter + 1}`;
+        input.name = `property${propertyCounter + 1}`;
         field.appendChild(input);
         row.id = `row${propertyCounter}`;
         row.appendChild(title);
