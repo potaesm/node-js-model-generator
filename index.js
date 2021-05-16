@@ -15,7 +15,7 @@ function camelToPascal(str = '') {
 }
 
 function getMandatoryFlag(str = '') {
-    return str.endsWith('*') ? '' : '_';
+    return str.endsWith('?') ? '_' : '';
 }
 
 async function gen(args) {
