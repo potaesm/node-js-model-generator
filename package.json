@@ -4,7 +4,7 @@
   "description": "Generate constructor, getter and setter",
   "main": "index.js",
   "config": {
-    "port": "3001"
+    "port": 3001
   },
   "scripts": {
     "test": "node index.js"
@@ -12,7 +12,6 @@
   "author": "Suthinan Musitmani",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
@@ -21,6 +20,6 @@
     "path": "^0.12.7"
   },
   "engines": {
-    "node": "12.18.2"
+    "node": "12"
   }
 }

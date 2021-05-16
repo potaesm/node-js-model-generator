@@ -1,1 +1,1 @@
-web: npm config set node-js-model-gen:port $PORT && npm test
+web: node index.js
