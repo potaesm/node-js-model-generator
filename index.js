@@ -90,7 +90,7 @@ app.get('', (request, response) => {
     return response.render('main');
 });
 
-app.post('', async (request, response) => {
+app.post('/gen', async (request, response) => {
     try {
         if (!!request.body) {
             const outputPath = await gen(Object.values(request.body).map((item) => item.trim()).filter((item) => !!item));
