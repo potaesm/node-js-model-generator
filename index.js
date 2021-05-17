@@ -51,28 +51,28 @@ async function gen(args) {
     const mapper = `${modelName}.prototype.map = function (object) {\n${mapperAssign}}\n`;
     /** Default Getter */
     const defaultGetterOptions = 'options = { mandatory: false, optional: false, present: false, compact: false }';
-    const LetObjectDefine = `\n\tlet o = {\n${defaultGetterObject.slice(0, -2) + '\n'}\t};`;
-    const defaultGetterMandatoryConfig = `\n\tif (options.mandatory && !options.optional) o = Object.fromEntries(Object.entries(o).filter(_ => !_[0].startsWith('_')));`;
-    const defaultGetterOptionalConfig = `\n\tif (options.optional && !options.mandatory) o = Object.fromEntries(Object.entries(o).filter(_ => _[0].startsWith('_')));`;
-    const defaultGetterPresentConfig = `\n\tif (options.present) o = Object.fromEntries(Object.entries(o).filter(_ => _[1] !== null));`;
-    const defaultGetterCompactConfig = `\n\tif (options.compact) o = Object.fromEntries(Object.entries(o).filter(_ => !!_[1]));`;
+    const objDefine = `\n\tlet o = {\n${defaultGetterObject.slice(0, -2) + '\n'}\t};`;
+    const objAssignWithMandatoryCondition = `\n\tif (options.mandatory && !options.optional) o = Object.fromEntries(Object.entries(o).filter(_ => !_[0].startsWith('_')));`;
+    const objAssignWithOptionalCondition = `\n\tif (options.optional && !options.mandatory) o = Object.fromEntries(Object.entries(o).filter(_ => _[0].startsWith('_')));`;
+    const objAssignWithPresentCondition = `\n\tif (options.present) o = Object.fromEntries(Object.entries(o).filter(_ => _[1] !== null));`;
+    const objAssignWithCompactCondition = `\n\tif (options.compact) o = Object.fromEntries(Object.entries(o).filter(_ => !!_[1]));`;
     const defaultGetterReturn = `\n\treturn Object.fromEntries(Object.entries(o).map(_ => { _[0] = _[0].replace('_', ''); return _; }));`;
-    const defaultGetter = `${modelName}.prototype.get = function (${defaultGetterOptions}) {${LetObjectDefine}${defaultGetterMandatoryConfig}${defaultGetterOptionalConfig}${defaultGetterPresentConfig}${defaultGetterCompactConfig}${defaultGetterReturn}\n}\n`;
+    const defaultGetter = `${modelName}.prototype.get = function (${defaultGetterOptions}) {${objDefine}${objAssignWithMandatoryCondition}${objAssignWithOptionalCondition}${objAssignWithPresentCondition}${objAssignWithCompactCondition}${defaultGetterReturn}\n}\n`;
     /** isEmpty Validator */
     const isEmptyValidator = `${modelName}.prototype.isEmpty = function () { return !Object.values(this).filter(_ => _ !== null).length }\n`;
     /** isFull Validator */
     const isFullValidator = `${modelName}.prototype.isFull = function () { return !Object.values(this).includes(null) }\n`;
     /** isValid Validator */
+    const MandatoryOptionalOptions = 'options = { mandatory: false, optional: false }';
     const ConstObjectDefine = `\n\tconst o = {\n${defaultGetterObject.slice(0, -2) + '\n'}\t};`;
-    const isValidValidatorReturn = `\n\treturn !Object.values(Object.fromEntries(Object.entries(o).filter(_ => !_[0].startsWith('_')))).includes(null);`;
-    const isValidValidator = `${modelName}.prototype.isValid = function () {${ConstObjectDefine}${isValidValidatorReturn}\n}\n`;
+    const entriesDefine = '\n\tlet entries = Object.entries(o);';
+    const entriesAssignWithMandatoryCondition = `\n\tif (options.mandatory && !options.optional) entries = entries.filter(_ => !_[0].startsWith('_'));`;
+    const entriesAssignWithOptionalCondition = `\n\tif (options.optional && !options.mandatory) entries = entries.filter(_ => _[0].startsWith('_'));`;
+    const isValidValidatorReturn = `\n\treturn !Object.values(Object.fromEntries(entries)).includes(null);`;
+    const isValidValidator = `${modelName}.prototype.isValid = function (${MandatoryOptionalOptions}) {${ConstObjectDefine}${entriesDefine}${entriesAssignWithMandatoryCondition}${entriesAssignWithOptionalCondition}${isValidValidatorReturn}\n}\n`;
     /** List Missing Fields */
-    const listMissingFieldsOptions = 'options = { mandatory: false, optional: false }';
-    const letEntriesDefine = '\n\tlet entries = Object.entries(o);';
-    const listMissingFieldsMandatoryConfig = `\n\tif (options.mandatory && !options.optional) entries = entries.filter(_ => !_[0].startsWith('_'));`;
-    const listMissingFieldsOptionalConfig = `\n\tif (options.optional && !options.mandatory) entries = entries.filter(_ => _[0].startsWith('_'));`;
     const listMissingFieldsReturn = `\n\treturn entries.filter(_ => _[1] === null).map(_ => _[0].replace('_', ''));`;
-    const listMissingFields = `${modelName}.prototype.listMissingFields = function (${listMissingFieldsOptions}) {${LetObjectDefine}${letEntriesDefine}${listMissingFieldsMandatoryConfig}${listMissingFieldsOptionalConfig}${listMissingFieldsReturn}\n}\n`;
+    const listMissingFields = `${modelName}.prototype.listMissingFields = function (${MandatoryOptionalOptions}) {${ConstObjectDefine}${entriesDefine}${entriesAssignWithMandatoryCondition}${entriesAssignWithOptionalCondition}${listMissingFieldsReturn}\n}\n`;
     /** Module Export */
     const moduleExports = `module.exports = ${modelName};\n`;
     const content = constructor + mapper + defaultGetter + getter + setter + isEmptyValidator + isFullValidator + isValidValidator + listMissingFields + moduleExports;
