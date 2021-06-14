@@ -48,8 +48,8 @@ async function gen(args) {
     /** Constructor */
     const constructor = `function ${modelName}(${extractedAttribute.map((attribute) => attribute + ' = null').join(', ')}) {\n${constructorAssign}}\n`;
     /** Mapper */
-    const mapperEmptyCheck = '\tif (!object) return;\n';
-    const mapper = `${modelName}.prototype.map = function (object) {\n${mapperEmptyCheck}${mapperAssign}}\n`;
+    const mapperSafe = '\tif (!object) return;\n';
+    const mapper = `${modelName}.prototype.map = function (object) {\n${mapperSafe}${mapperAssign}}\n`;
     /** Default Getter */
     const defaultGetterOptions = 'options = { mandatory: false, optional: false, present: false, compact: false }';
     const objDefine = `\n\tlet o = {\n${defaultGetterObject.slice(0, -2) + '\n'}\t};`;
