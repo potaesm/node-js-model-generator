@@ -1,7 +1,7 @@
 # NodeJS Model Generator
 
 ## Usage
-* Go to the [App](https://node-js-model-gen.herokuapp.com)
+* Go to the [App](https://node-modeler.herokuapp.com/)
 
 ## Deployment
 ```bash
