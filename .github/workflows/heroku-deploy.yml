@@ -1,35 +1,53 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Heroku deploy
 
-# Controls when the action will run. Triggers the workflow on push
-# events but only for the master branch
 on:
   push:
     branches: [ master ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
-    # Runs a single command using the runners shell
-    # And of course we need to goto our functions folder to deploy
-    - name: Install npm packages
-      run: npm install
+    # Send LINE Notify
+    - name: Send "Deployment started"
+      uses: snow-actions/line-notify@v1.0.0
+      with:
+        access_token: ${{ secrets.LINE_ACCESS_TOKEN }}
+        message: |
+          Deployment started
+          Repository - ${{ github.repository }}
+          Commit - ${{ github.event.head_commit.message }}
+          By ${{ github.event.head_commit.author.name }}, ${{ github.event.head_commit.timestamp }}
         
     # Deploying to Heroku
     - name:  Deploy to Heroku
-      uses: akhileshns/heroku-deploy@v3.6.8
+      uses: akhileshns/heroku-deploy@v3.12.12
       with:
         heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-        heroku_app_name: node-js-model-gen
-        heroku_email: suthinan.musitmani@gmail.com
+        heroku_app_name: node-modeler
+        heroku_email: guitarzeed.school.manager@gmail.com
+
+    # Send LINE Notify
+    - name: Send "Deployment failed"
+      if: ${{ failure() }}
+      uses: snow-actions/line-notify@v1.0.0
+      with:
+        access_token: ${{ secrets.LINE_ACCESS_TOKEN }}
+        message: |
+          Deployment failed
+          Repository - ${{ github.repository }}
+          Commit - ${{ github.event.head_commit.message }}
+          By ${{ github.event.head_commit.author.name }}, ${{ github.event.head_commit.timestamp }}
+    - name: Send "Deployment finished"
+      if: ${{ success() }}
+      uses: snow-actions/line-notify@v1.0.0
+      with:
+        access_token: ${{ secrets.LINE_ACCESS_TOKEN }}
+        message: |
+          Deployment finished
+          Repository - ${{ github.repository }}
+          Commit - ${{ github.event.head_commit.message }}
+          By ${{ github.event.head_commit.author.name }}, ${{ github.event.head_commit.timestamp }}
